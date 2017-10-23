@@ -1,0 +1,2 @@
+# opinion
+Opinion poll.

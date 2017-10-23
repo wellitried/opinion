@@ -1,0 +1,8 @@
+{
+  "name": "opinion",
+  "dependencies": {
+    "angular": "^1.6.6",
+    "angular-route": "1.6.6",
+    "bootstrap": "3.3.7"
+  }
+}

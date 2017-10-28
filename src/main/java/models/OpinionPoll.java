@@ -23,6 +23,12 @@ public class OpinionPoll {
 
     private Date creationDate;
 
+    private Date startDate;
+
+    private Date finishDate;
+
+    private String title;
+
 
     public OpinionPoll() {
     }
@@ -58,5 +64,29 @@ public class OpinionPoll {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -103,6 +103,7 @@ angular
             };
 
             $scope.saveOpinion = function (opinion) {
+                console.log(opinion);
                 $http({
                     method: 'POST',
                     url: '/saveopinionpoll',

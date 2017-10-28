@@ -19,6 +19,10 @@ public class Answer {
 
     private String answerText;
 
+    private boolean chosen;
+
+    private Long navigateToSectionId;
+
 
     public Answer() {
     }
@@ -46,5 +50,21 @@ public class Answer {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public boolean isChosen() {
+        return chosen;
+    }
+
+    public void setChosen(boolean chosen) {
+        this.chosen = chosen;
+    }
+
+    public Long getNavigateToSectionId() {
+        return navigateToSectionId;
+    }
+
+    public void setNavigateToSectionId(Long navigateToSectionId) {
+        this.navigateToSectionId = navigateToSectionId;
     }
 }

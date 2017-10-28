@@ -23,7 +23,9 @@ public class Section {
     @JsonBackReference
     private OpinionPoll opinionPoll;
 
-    private String tempText;
+    private String text;
+
+    private Integer timeToResponse;
 
 
     public Section() {
@@ -46,12 +48,12 @@ public class Section {
         this.questions = questions;
     }
 
-    public String getTempText() {
-        return tempText;
+    public String getText() {
+        return text;
     }
 
-    public void setTempText(String tempText) {
-        this.tempText = tempText;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public OpinionPoll getOpinionPoll() {
@@ -60,5 +62,13 @@ public class Section {
 
     public void setOpinionPoll(OpinionPoll opinionPoll) {
         this.opinionPoll = opinionPoll;
+    }
+
+    public Integer getTimeToResponse() {
+        return timeToResponse;
+    }
+
+    public void setTimeToResponse(Integer timeToResponse) {
+        this.timeToResponse = timeToResponse;
     }
 }

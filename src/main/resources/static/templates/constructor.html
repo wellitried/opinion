@@ -1,34 +1,89 @@
-<style>
-    .well {
-        background-color: #ffffff;
-        border: 1px solid #e3e3e3;
-    }
-</style>
+<div class="container">
 
-<button class="btn btn-primary" ng-click="saveOpinion(opinion)">Save</button>
-
-<div class="well" style="width: 100%" ng-repeat="section in opinion.sections">
-    Section
-
-    <div class="well well-sm" style="width: 100%" ng-repeat="question in section.questions">
-        Question
-
-        <div class="well well-sm" style="width: 100%" ng-repeat="answer in question.answers">
-            Answer
-
-        </div>
-        <div class="well well-sm" style="width: 100%; text-align: center; cursor: pointer;"
-             ng-click="newAnswer(question)">
-            <span class="glyphicon glyphicon-plus">answer</span>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+                <input placeholder="opinion poll title"
+                       type="text" class="form-control"
+                       ng-model="opinion.title">
+            </div>
         </div>
     </div>
-    <div class="well well-sm" style="width: 100%; text-align: center; cursor: pointer;"
-         ng-click="newQuestion(section)">
-        <span class="glyphicon glyphicon-plus">question</span>
+
+    <div class="row section" ng-repeat="section in opinion.sections track by $index">
+
+        <div class="col-md-12">
+
+            <label>Section #{{$index + 1}}</label>
+            <input placeholder="optional description or clarification"
+                   type="text" style="margin-top: 3px; width: 25%"
+                   ng-model="section.text">
+            <input placeholder="time to response in seconds"
+                   type="text" style="margin-top: 3px;float: right;"
+                   ng-model="section.timeToResponse">
+
+            <div class="row question" ng-repeat="question in section.questions track by $index">
+                <div class="col-md-12">
+
+                    <label>Question #{{$index + 1}}</label>
+                    <input placeholder="question text"
+                           type="text" style="margin-top: 3px; width: 75%"
+                           ng-model="question.questionText">
+                    <span>
+                        <input type="checkbox" ng-model="question.multipleAnswers">
+                        <span class="checkbox-text">multiple answers</span>
+                    </span>
+
+                    <div class="row answer" ng-repeat="answer in question.answers track by $index">
+                        <div class="col-md-12">
+
+                            <label>Answer #{{$index + 1}}</label>
+                            <input placeholder="answer text"
+                                   type="text" style="margin-top: 2px; width: 65%;"
+                                   ng-model="answer.answerText">
+                            <label>Navigate to section #:</label>
+                            <select ng-model="answer.navigateToSectionId"
+                                    ng-options="section.id as section.id for section in opinion.sections">
+                                <option value="">default</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="row add-button">
+                        <div class="col-md-12"
+                             ng-click="newAnswer(question)">
+                            <span class="glyphicon glyphicon-plus">answer</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row question add-button">
+                <div class="col-md-12"
+                     ng-click="newQuestion(section)">
+                    <span class="glyphicon glyphicon-plus">question</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-</div>
-<div class="well well-sm" style="width: 100%; text-align: center; cursor: pointer;"
-     ng-click="newSection(opinion)">
-    <span class="glyphicon glyphicon-plus">section</span>
+    <div class="row section add-button">
+        <div class="col-md-12"
+             ng-click="newSection(opinion)">
+            <span class="glyphicon glyphicon-plus">section</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" align="middle">
+            <button class="btn save-btn"
+                    ng-click="saveOpinion(opinion)"
+                    title="Save opinion poll">
+                <span class="glyphicon glyphicon-floppy-disk"/>
+            </button>
+        </div>
+    </div>
+
 </div>

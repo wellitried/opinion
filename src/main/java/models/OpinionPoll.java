@@ -17,6 +17,9 @@ public class OpinionPoll {
     @Column(unique = true)
     private String code;
 
+    @Column(unique = true)
+    private String publicCode;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "opinionPoll", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Section> sections;
@@ -88,5 +91,13 @@ public class OpinionPoll {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getPublicCode() {
+        return publicCode;
+    }
+
+    public void setPublicCode(String publicCode) {
+        this.publicCode = publicCode;
     }
 }

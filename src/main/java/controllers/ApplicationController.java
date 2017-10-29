@@ -56,6 +56,7 @@ public class ApplicationController {
         if (opinionPoll == null) {
             opinionPoll = new OpinionPoll();
             opinionPoll.setCode(code);
+            opinionPoll.setPublicCode(Util.getInstance().generateCode());
             opinionPoll.setCreationDate(new Date());
             opinionPoll = opinionPollRepository.save(opinionPoll);
         }

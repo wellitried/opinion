@@ -3,11 +3,13 @@
     height: 50px;
     text-align: center;
     color: white;
-    background-color: #464646;
+    background-color: #6c6c6c;
 }
 
-span.glyphicon-floppy-disk {
+span.glyphicon-floppy-disk,
+span.glyphicon-refresh {
     font-size: 20px;
+    color: #ffffff;
 }
 
 body {
@@ -21,7 +23,7 @@ body {
 
 .row.section {
     min-height: 34px;
-    background-color: #f0f0f0;
+    background-color: #fafafa;
     border: 1px solid #7a7a7a;
     border-radius: 4px;
 }
@@ -35,7 +37,7 @@ body {
 
 .row.answer {
     min-height: 34px;
-    background-color: #fafafa;
+    background-color: #f0f0f0;
     border: 1px solid #7a7a7a;
     border-radius: 4px;
 }
@@ -45,6 +47,10 @@ body {
     cursor: pointer;
     border: 1px solid #7a7a7a;
     border-radius: 4px;
+}
+
+.add-button > span {
+    margin-top: 8px;
 }
 
 .checkbox-text {

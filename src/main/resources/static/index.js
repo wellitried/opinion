@@ -47,8 +47,8 @@ angular
 
 
         }])
-    .controller('ConstructorController', ['$scope', '$http', '$routeParams',
-        function ($scope, $http, $routeParams) {
+    .controller('ConstructorController', ['$scope', '$http', '$routeParams', '$location',
+        function ($scope, $http, $routeParams, $location) {
 
             var code = $routeParams.code;
 
@@ -77,10 +77,12 @@ angular
                     opinion.sections = [];
                 }
                 $scope.opinion = opinion;
+                $scope.publicLink = $location.absUrl().split('#')[0] + '#/opinion/' + opinion.publicCode;
             }
 
             $scope.newSection = function (opinion) {
                 var section = {
+                    number: opinion.sections.length + 1,
                     opinionPoll: {id: opinion.id},
                     questions: []
                 };
@@ -104,6 +106,7 @@ angular
 
             $scope.saveOpinion = function (opinion) {
                 console.log(opinion);
+                $scope.loading = true;
                 $http({
                     method: 'POST',
                     url: '/saveopinionpoll',
@@ -111,12 +114,14 @@ angular
                 }).then(
                     function (response) {
                         if (response.data && response.data.id) {
+                            $scope.loading = false;
                             $scope.opinion = response.data;
                         } else {
                             errorCallback(response);
                         }
                     },
                     function (response) {
+                        $scope.loading = false;
                         errorCallback(response);
                     }
                 );

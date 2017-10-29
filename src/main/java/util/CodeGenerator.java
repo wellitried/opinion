@@ -18,7 +18,7 @@ class CodeGenerator {
 
     private static final String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-    private static final int codeLength = 6;
+    private static final int codeLength = 8;
 
 
     String generateCode() {

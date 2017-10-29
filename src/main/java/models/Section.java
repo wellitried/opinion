@@ -27,6 +27,8 @@ public class Section {
 
     private Integer timeToResponse;
 
+    private Integer number;
+
 
     public Section() {
     }
@@ -70,5 +72,13 @@ public class Section {
 
     public void setTimeToResponse(Integer timeToResponse) {
         this.timeToResponse = timeToResponse;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer index) {
+        this.number = index;
     }
 }

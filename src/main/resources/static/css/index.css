@@ -6,8 +6,34 @@
     background-color: #6c6c6c;
 }
 
+.button-holder {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.next-btn {
+    width: 75px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    background-color: #6c6c6c;
+    float: right;
+}
+
+.previous-btn {
+    width: 75px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    background-color: #6c6c6c;
+    float: left;
+}
+
 span.glyphicon-floppy-disk,
-span.glyphicon-refresh {
+span.glyphicon-refresh,
+span.glyphicon-arrow-left,
+span.glyphicon-arrow-right {
     font-size: 20px;
     color: #ffffff;
 }
@@ -26,6 +52,7 @@ body {
     background-color: #fafafa;
     border: 1px solid #7a7a7a;
     border-radius: 4px;
+    position: relative;
 }
 
 .row.question {

@@ -25,6 +25,8 @@ public class Question {
 
     private boolean multipleAnswers;
 
+    private boolean customNavigation;
+
     private String questionText;
 
 
@@ -70,5 +72,13 @@ public class Question {
 
     public void setSection(Section section) {
         this.section = section;
+    }
+
+    public boolean isCustomNavigation() {
+        return customNavigation;
+    }
+
+    public void setCustomNavigation(boolean customNavigation) {
+        this.customNavigation = customNavigation;
     }
 }

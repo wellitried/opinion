@@ -32,9 +32,14 @@
                     <input placeholder="question text"
                            type="text" style="margin-top: 3px; width: 75%"
                            ng-model="question.questionText">
+                    <br/>
                     <span>
                         <input type="checkbox" ng-model="question.multipleAnswers">
                         <span class="checkbox-text">multiple answers</span>
+                    </span>
+                    <span>
+                        <input type="checkbox" ng-model="question.customNavigation">
+                        <span class="checkbox-text">custom navigation</span>
                     </span>
 
                     <div class="row answer" ng-repeat="answer in question.answers track by $index">
@@ -44,11 +49,13 @@
                             <input placeholder="answer text"
                                    type="text" style="margin-top: 2px; width: 65%;"
                                    ng-model="answer.answerText">
-                            <label>Navigate to section #:</label>
-                            <select ng-model="answer.navigateToSectionId"
-                                    ng-options="section.id as section.number for section in opinion.sections">
-                                <option value="">default</option>
-                            </select>
+                            <span ng-show="question.customNavigation">
+                                <label>Navigate to section #:</label>
+                                <select ng-model="answer.navigateToSectionId"
+                                        ng-options="section.id as section.number for section in opinion.sections">
+                                    <option value="">default</option>
+                                </select>
+                            </span>
 
                         </div>
                     </div>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -74,5 +75,17 @@ public class ApplicationController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @RequestMapping(path = "/getopinionpoll/{publicCode}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity getOpinionPoll(@PathVariable String publicCode) {
+
+        OpinionPoll opinionPoll = opinionPollRepository.findByPublicCode(publicCode);
+
+        if (opinionPoll == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        return ResponseEntity.ok().body(Util.getInstance().toJson(opinionPoll));
     }
 }

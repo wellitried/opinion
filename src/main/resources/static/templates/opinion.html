@@ -1,2 +1,58 @@
+<div class="container" style="min-height: 500px;">
 
-opinion
+    <div class="row section" style="min-height: 500px;">
+        <div class="col-md-12" style="margin-right: 50px;">
+
+            <label>Section #{{currentSection.number}}</label><br/>
+            <span>{{currentSection.text}}</span>
+
+            <div class="row question" ng-repeat="question in currentSection.questions track by $index">
+                <div class="col-md-10">
+
+                    <label>Question #{{$index + 1}}</label>
+                    <span>{{question.questionText}}</span>
+                    <br/>
+
+                    <div class="row answer" ng-repeat="answer in question.answers track by $index">
+
+                        <div class="col-md-8" ng-show="question.multipleAnswers">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="answer.chosen">
+                                    <span>{{answer.answerText}}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8" ng-show="!question.multipleAnswers">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="optradio{{question.id}}" ng-model="answer.chosen">
+                                    <span>{{answer.answerText}}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="button-holder">
+            <button class="btn previous-btn"
+                    ng-click="previousSection()"
+                    ng-show="showPreviousSectionButton()"
+                    title="Previous section">
+                <span class="glyphicon glyphicon glyphicon-arrow-left"/>
+            </button>
+            <button class="btn next-btn"
+                    ng-click="nextSection()"
+                    title="Next section">
+                <span class="glyphicon glyphicon glyphicon-arrow-right"/>
+            </button>
+        </div>
+
+    </div>
+
+</div>

@@ -9,4 +9,6 @@ public interface OpinionPollRepository extends CrudRepository<OpinionPoll, Long>
 
     public OpinionPoll findByCode(String code);
 
+    public OpinionPoll findByPublicCode(String publicCode);
+
 }

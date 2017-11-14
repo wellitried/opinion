@@ -11,7 +11,7 @@ angular
                     templateUrl: 'templates/constructor.html',
                     controller: 'ConstructorController'
                 })
-                .when('/opinion/:code', {
+                .when('/opinion/:publicCode', {
                     templateUrl: 'templates/opinion.html',
                     controller: 'OpinionController'
                 })
@@ -47,8 +47,8 @@ angular
 
 
         }])
-    .controller('ConstructorController', ['$scope', '$http', '$routeParams', '$location',
-        function ($scope, $http, $routeParams, $location) {
+    .controller('ConstructorController', ['$scope', '$http', '$routeParams', '$location', '$interval',
+        function ($scope, $http, $routeParams, $location, $interval) {
 
             var code = $routeParams.code;
 
@@ -71,6 +71,7 @@ angular
             );
 
             function init(data) {
+                console.log(data);
                 var opinion = data;
                 opinion.code = code;
                 if (!opinion.sections) {
@@ -78,6 +79,22 @@ angular
                 }
                 $scope.opinion = opinion;
                 $scope.publicLink = $location.absUrl().split('#')[0] + '#/opinion/' + opinion.publicCode;
+                initAutosave();
+            }
+
+            function initAutosave() {
+                var stop = $interval(function () {
+                    $scope.saveOpinion($scope.opinion);
+                }, 60000);
+
+                $scope.stopInterval = function () {
+                    $interval.cancel(stop);
+                    stop = undefined;
+                };
+
+                $scope.$on('$destroy', function () {
+                    $scope.stopInterval();
+                });
             }
 
             $scope.newSection = function (opinion) {
@@ -99,13 +116,15 @@ angular
 
             $scope.newAnswer = function (question) {
                 var answer = {
-                    question: {id: question.id}
+                    question: {id: question.id},
+                    navigateToSectionId: null
                 };
                 question.answers.push(answer);
             };
 
             $scope.saveOpinion = function (opinion) {
                 console.log(opinion);
+
                 $scope.loading = true;
                 $http({
                     method: 'POST',
@@ -115,6 +134,7 @@ angular
                     function (response) {
                         if (response.data && response.data.id) {
                             $scope.loading = false;
+                            console.log(response);
                             $scope.opinion = response.data;
                         } else {
                             errorCallback(response);
@@ -126,6 +146,64 @@ angular
                     }
                 );
             };
+
+            function errorCallback(resp) {
+                alert(resp.status + ": " + resp.statusText);
+            }
+
+
+        }])
+    .controller('OpinionController', ['$scope', '$http', '$routeParams', '$location',
+        function ($scope, $http, $routeParams, $location) {
+
+            var publicCode = $routeParams.publicCode;
+
+            $http({
+                method: 'GET',
+                url: '/getopinionpoll/' + publicCode
+            }).then(
+                function (response) {
+                    if (response.data && response.data.id) {
+                        init(response.data);
+                    } else {
+                        errorCallback(response);
+                    }
+                },
+                function (response) {
+                    errorCallback(response);
+                }
+            );
+
+            function init(data) {
+                console.log(data);
+                $scope.opinion = data;
+                if (!$scope.opinion.sections || $scope.opinion.sections.length == 0) {
+                    alert("Empty opinion poll!");
+                    return;
+                }
+                $scope.currentSection = $scope.opinion.sections[0];
+
+                $scope.showPreviousSectionButton = function () {
+                    return $scope.opinion.sections.indexOf($scope.currentSection) !== 0;
+                };
+
+                $scope.previousSection = function () {
+                    var index = $scope.opinion.sections.indexOf($scope.currentSection);
+                    if ($scope.opinion.sections[index - 1]) {
+                        $scope.currentSection = $scope.opinion.sections[index - 1];
+                    }
+                };
+
+                $scope.nextSection = function () {
+                    var index = $scope.opinion.sections.indexOf($scope.currentSection);
+                    if ($scope.opinion.sections[index + 1]) {
+                        $scope.currentSection = $scope.opinion.sections[index + 1];
+                    }
+                };
+
+
+            }
+
 
             function errorCallback(resp) {
                 alert(resp.status + ": " + resp.statusText);

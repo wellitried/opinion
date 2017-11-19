@@ -8,8 +8,16 @@
                        ng-model="opinion.title">
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
-            public link: <label><a href="{{publicLink}}">{{publicLink}}</a></label>
+            <label title="Предоставляется участникам опроса">Публичная ссылка: {{shareLink}}</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a title="Ссылка для тестирования опроса, результаты не записываются"
+               ng-href="{{viewLink}}">Посмотреть результат</a>
         </div>
     </div>
 

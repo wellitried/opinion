@@ -1,4 +1,4 @@
-package util;
+package app.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -16,12 +16,12 @@ public class Util {
         private static final Util instance = new Util();
     }
 
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+
     private Util() {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-
-
-    private static final ObjectMapper mapper = new ObjectMapper();
 
 
     public String toJson(Object object) {

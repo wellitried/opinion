@@ -1,25 +1,19 @@
-package util;
+package app.util;
 
 import java.util.Random;
 
 class CodeGenerator {
 
-    static CodeGenerator getInstance() {
-        return CodeGenerator.SingletonHolder.instance;
-    }
+    private static final String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    private static final int codeLength = 8;
 
-    private static class SingletonHolder {
-        private static final CodeGenerator instance = new CodeGenerator();
-    }
 
     private CodeGenerator() {
     }
 
-
-    private static final String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-    private static final int codeLength = 8;
-
+    static CodeGenerator getInstance() {
+        return CodeGenerator.SingletonHolder.instance;
+    }
 
     String generateCode() {
         Random random = new Random();
@@ -28,5 +22,9 @@ class CodeGenerator {
             code.append(symbols.charAt(random.nextInt(symbols.length())));
         }
         return code.toString();
+    }
+
+    private static class SingletonHolder {
+        private static final CodeGenerator instance = new CodeGenerator();
     }
 }

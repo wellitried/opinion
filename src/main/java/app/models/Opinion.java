@@ -1,4 +1,4 @@
-package models;
+package app.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -7,12 +7,16 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "opinion_poll")
-public class OpinionPoll {
+@Table(name = "opinion")
+public class Opinion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private Opinion template;
 
     @Column(unique = true)
     private String code;
@@ -21,19 +25,17 @@ public class OpinionPoll {
     private String publicCode;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "opinionPoll", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "opinion", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Section> sections;
 
     private Date creationDate;
-
-    private Date startDate;
 
     private Date finishDate;
 
     private String title;
 
 
-    public OpinionPoll() {
+    public Opinion() {
     }
 
 
@@ -69,14 +71,6 @@ public class OpinionPoll {
         this.creationDate = creationDate;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
     public Date getFinishDate() {
         return finishDate;
     }
@@ -99,5 +93,13 @@ public class OpinionPoll {
 
     public void setPublicCode(String publicCode) {
         this.publicCode = publicCode;
+    }
+
+    public Opinion getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(Opinion template) {
+        this.template = template;
     }
 }

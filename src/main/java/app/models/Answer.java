@@ -1,4 +1,4 @@
-package models;
+package app.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -10,7 +10,7 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id", nullable = false)
@@ -28,11 +28,11 @@ public class Answer {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long value) {
+    public void setId(Long value) {
         this.id = value;
     }
 

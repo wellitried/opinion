@@ -1,4 +1,4 @@
-package models;
+package app.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -12,16 +12,16 @@ public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Question> questions;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "opinionPollId", nullable = false)
+    @JoinColumn(name = "opinionId", nullable = false)
     @JsonBackReference
-    private OpinionPoll opinionPoll;
+    private Opinion opinion;
 
     private String text;
 
@@ -34,11 +34,11 @@ public class Section {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long value) {
+    public void setId(Long value) {
         this.id = value;
     }
 
@@ -58,12 +58,12 @@ public class Section {
         this.text = text;
     }
 
-    public OpinionPoll getOpinionPoll() {
-        return opinionPoll;
+    public Opinion getOpinion() {
+        return opinion;
     }
 
-    public void setOpinionPoll(OpinionPoll opinionPoll) {
-        this.opinionPoll = opinionPoll;
+    public void setOpinion(Opinion opinion) {
+        this.opinion = opinion;
     }
 
     public Integer getTimeToResponse() {

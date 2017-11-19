@@ -11,7 +11,7 @@ angular
                     templateUrl: 'templates/constructor.html',
                     controller: 'ConstructorController'
                 })
-                .when('/opinion/:publicCode', {
+                .when('/opinion/:publicCode/:test?', {
                     templateUrl: 'templates/opinion.html',
                     controller: 'OpinionController'
                 })
@@ -78,7 +78,8 @@ angular
                     opinion.sections = [];
                 }
                 $scope.opinion = opinion;
-                $scope.publicLink = $location.absUrl().split('#')[0] + '#/opinion/' + opinion.publicCode;
+                $scope.shareLink = $location.absUrl().split('#')[0] + '#/opinion/' + opinion.publicCode;
+                $scope.viewLink = '#/opinion/' + opinion.publicCode + '/test';
                 initAutosave();
             }
 
@@ -134,7 +135,7 @@ angular
                     function (response) {
                         if (response.data && response.data.id) {
                             $scope.loading = false;
-                            console.log(response);
+                            //console.log(response);
                             $scope.opinion = response.data;
                         } else {
                             errorCallback(response);
@@ -157,10 +158,11 @@ angular
         function ($scope, $http, $routeParams, $location) {
 
             var publicCode = $routeParams.publicCode;
+            var test = $routeParams.test;
 
             $http({
                 method: 'GET',
-                url: '/getopinionpoll/' + publicCode
+                url: '/getopinionpoll/' + publicCode + (test ? '/true' : '/false')
             }).then(
                 function (response) {
                     if (response.data && response.data.id) {
@@ -208,5 +210,5 @@ angular
             function errorCallback(resp) {
                 alert(resp.status + ": " + resp.statusText);
             }
-            
+
         }]);

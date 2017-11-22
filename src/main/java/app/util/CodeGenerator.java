@@ -5,7 +5,7 @@ import java.util.Random;
 class CodeGenerator {
 
     private static final String symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    private static final int codeLength = 8;
+    private static final int codeLength = 10;
 
 
     private CodeGenerator() {

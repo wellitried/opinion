@@ -3,29 +3,43 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input placeholder="opinion poll title"
+                <input placeholder="Название опроса"
                        type="text" class="form-control"
                        ng-model="opinion.title">
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
-            <label title="Предоставляется участникам опроса">Публичная ссылка: {{shareLink}}</label>
+            <a class="btn btn-default" title="Ссылка для тестирования опроса, результаты не записываются"
+               ng-href="{{viewLink}}" target="_blank">Посмотреть результат</a>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <a title="Ссылка для тестирования опроса, результаты не записываются"
-               ng-href="{{viewLink}}">Посмотреть результат</a>
+        <div class="col-md-6" title="Предоставляется участникам опроса">
+            <label>Публичная ссылка: </label>
+            <input type="text" value="{{shareLink}}" readonly style="width: 100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <button style="width: 100%" type="button" class="btn btn-default" ng-click="addPersonInfoSection(opinion)">
+                Добавить секцию с информацией о респонденте
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <button style="width: 100%" type="button" class="btn btn-default" ng-click="addInfoSection(opinion)">
+                Добавить информационную секцию
+            </button>
         </div>
     </div>
 
-    <div class="row section" ng-repeat="section in opinion.sections">
+
+    <div class="row section" ng-repeat="section in opinion.sections track by $index">
 
         <div class="col-md-12">
 
-            <label>Section #{{section.number}}</label>
+            <label>Секция #{{$index + 1}}</label>
             <input placeholder="optional description or clarification"
                    type="text" style="margin-top: 3px; width: 25%"
                    ng-model="section.text">
@@ -33,66 +47,83 @@
                    type="text" style="margin-top: 3px;float: right;"
                    ng-model="section.timeToResponse">
 
-            <div class="row question" ng-repeat="question in section.questions track by $index">
-                <div class="col-md-12">
+            <div ng-show="section.type === 'QUESTIONS'">
+                <div class="row question" ng-repeat="question in section.questions track by $index">
+                    <div class="col-md-12">
 
-                    <label>Question #{{$index + 1}}</label>
-                    <input placeholder="question text"
-                           type="text" style="margin-top: 3px; width: 75%"
-                           ng-model="question.questionText">
-                    <br/>
-                    <span>
-                        <input type="checkbox" ng-model="question.multipleAnswers">
-                        <span class="checkbox-text">multiple answers</span>
-                    </span>
-                    <span>
-                        <input type="checkbox" ng-model="question.customNavigation">
-                        <span class="checkbox-text">custom navigation</span>
-                    </span>
+                        <label>Вопрос #{{$index + 1}}</label>
+                        <input placeholder="question text"
+                               type="text" style="margin-top: 3px; width: 75%"
+                               ng-model="question.questionText">
+                        <br/>
+                        <span>
+                            <input type="checkbox" ng-model="question.multipleAnswers">
+                            <span class="checkbox-text">Выбор нескольких ответов</span>
+                        </span>
+                        <span>
+                            <input type="checkbox" ng-model="question.customNavigation">
+                            <span class="checkbox-text">Сложная навигация</span>
+                        </span>
 
-                    <div class="row answer" ng-repeat="answer in question.answers track by $index">
-                        <div class="col-md-12">
+                        <div class="row answer" ng-repeat="answer in question.answers track by $index">
+                            <div class="col-md-12">
 
-                            <label>Answer #{{$index + 1}}</label>
-                            <input placeholder="answer text"
-                                   type="text" style="margin-top: 2px; width: 65%;"
-                                   ng-model="answer.answerText">
-                            <span ng-show="question.customNavigation">
-                                <label>Navigate to section #:</label>
+                                <label>Ответ #{{$index + 1}}</label>
+                                <input placeholder="answer text"
+                                       type="text" style="margin-top: 2px; width: 65%;"
+                                       ng-model="answer.answerText">
+                                <span ng-show="question.customNavigation">
+                                <label>Перейти к секции #</label>
                                 <select ng-model="answer.navigateToSectionId"
-                                        ng-options="section.id as section.number for section in opinion.sections">
+                                        ng-options="section.id as (opinion.sections.indexOf(section)+1) for section in opinion.sections">
                                     <option value="">default</option>
                                 </select>
                             </span>
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="row add-button"
-                         ng-click="newAnswer(question)">
-                        <span class="glyphicon glyphicon-plus">answer</span>
-                    </div>
+                        <div class="row" align="middle">
+                            <button type="button" class="btn btn-default" ng-click="newAnswer(question)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Добавить ответ
+                            </button>
+                        </div>
 
+                    </div>
+                </div>
+
+                <div class="row" align="middle">
+                    <button type="button" class="btn btn-default" ng-click="newQuestion(section)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Добавить вопрос
+                    </button>
                 </div>
             </div>
 
-            <div class="row question add-button"
-                 ng-click="newQuestion(section)">
-                <span class="glyphicon glyphicon-plus">question</span>
+            <div ng-show="section.type === 'RESPONDENT_INFO'">
+                <div class="row" align="middle">
+                    <button type="button" class="btn btn-default" ng-click="addPersonInfoField(section)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Добавить вопрос
+                    </button>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <div class="row section add-button"
-         ng-click="newSection(opinion)">
-        <span class="glyphicon glyphicon-plus">section</span>
+    <div class="row" align="middle">
+        <button type="button" class="btn btn-default" ng-click="newSection(opinion)">
+            <span class="glyphicon glyphicon-plus"></span>
+            Добавить секцию
+        </button>
     </div>
 
     <div class="row">
         <div class="col-md-12" align="middle">
             <button class="btn save-btn"
                     ng-click="saveOpinion(opinion)"
-                    title="Save opinion poll">
+                    title="Сохранить опрос (сохраняется автоматически каждую минуту)">
                 <span ng-show="!loading" class="glyphicon glyphicon-floppy-disk"/>
                 <span ng-show="loading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"/>
             </button>

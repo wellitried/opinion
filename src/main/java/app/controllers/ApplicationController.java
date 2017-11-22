@@ -2,7 +2,7 @@ package app.controllers;
 
 import app.models.Opinion;
 import app.repositories.TemporaryDAO;
-import app.util.NewOpinionMaker;
+import app.util.OpinionService;
 import app.util.Util;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
@@ -47,11 +47,7 @@ public class ApplicationController {
         Opinion opinion = temporaryDAO.findOpinionByCode(code);
 
         if (opinion == null) {
-            opinion = new Opinion();
-            opinion.setCode(code);
-            opinion.setPublicCode(Util.getInstance().generateCode());
-            opinion.setCreationDate(new Date());
-            temporaryDAO.save(Opinion.class, opinion, opinion.getId());
+            opinion = OpinionService.getInstance().makeOpinionTemplate(code, temporaryDAO);
         }
 
         return ResponseEntity.ok().body(Util.getInstance().toJson(opinion));
@@ -79,7 +75,7 @@ public class ApplicationController {
         }
 
         if (!test) {
-            opinion = NewOpinionMaker.getInstance().makeOpinionFromTemplate(opinion, temporaryDAO);
+            opinion = OpinionService.getInstance().makeOpinionFromTemplate(opinion, temporaryDAO);
         }
 
         return ResponseEntity.ok().body(Util.getInstance().toJson(opinion));

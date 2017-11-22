@@ -100,11 +100,28 @@ angular
 
             $scope.newSection = function (opinion) {
                 var section = {
-                    number: opinion.sections.length + 1,
                     opinionPoll: {id: opinion.id},
+                    type: "QUESTIONS",
                     questions: []
                 };
                 opinion.sections.push(section);
+            };
+
+            $scope.addPersonInfoSection = function (opinion) {
+                if (opinion.sections.some(function (section) { return section.type === 'RESPONDENT_INFO'; })) {
+                    alert("В опросе может быть единственная секция с информацией о респонденте");
+                    return;
+                }
+                var section = {
+                    opinionPoll: {id: opinion.id},
+                    type: "RESPONDENT_INFO",
+                    additionalJson: {}
+                };
+                opinion.sections.unshift(section);
+            };
+
+            $scope.addPersonInfoField = function (section) {
+
             };
 
             $scope.newQuestion = function (section) {
@@ -124,6 +141,10 @@ angular
             };
 
             $scope.saveOpinion = function (opinion) {
+
+                opinion.sections.forEach(function (section) {
+                    section.additionalJson = JSON.stringify(section.additionalJson);
+                });
                 console.log(opinion);
 
                 $scope.loading = true;
@@ -135,7 +156,6 @@ angular
                     function (response) {
                         if (response.data && response.data.id) {
                             $scope.loading = false;
-                            //console.log(response);
                             $scope.opinion = response.data;
                         } else {
                             errorCallback(response);

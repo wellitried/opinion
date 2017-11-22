@@ -10,6 +10,20 @@ import java.util.List;
 @Table(name = "section")
 public class Section {
 
+    public String getAdditionalJson() {
+        return additionalJson;
+    }
+
+    public void setAdditionalJson(String additionalJson) {
+        this.additionalJson = additionalJson;
+    }
+
+    enum SectionType{
+        QUESTIONS,
+        RESPONDENT_INFO,
+        INFORMATION
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -27,8 +41,10 @@ public class Section {
 
     private Integer timeToResponse;
 
-    private Integer number;
+    @Enumerated(EnumType.STRING)
+    private SectionType type;
 
+    private String additionalJson;
 
     public Section() {
     }
@@ -74,11 +90,12 @@ public class Section {
         this.timeToResponse = timeToResponse;
     }
 
-    public Integer getNumber() {
-        return number;
+    public SectionType getType() {
+        return type;
     }
 
-    public void setNumber(Integer index) {
-        this.number = index;
+    public void setType(SectionType type) {
+        this.type = type;
     }
+
 }

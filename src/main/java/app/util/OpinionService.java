@@ -10,14 +10,25 @@ import org.springframework.beans.BeanUtils;
 import java.util.Date;
 import java.util.List;
 
-public class NewOpinionMaker {
+public class OpinionService {
 
-    public static NewOpinionMaker getInstance() {
-        return NewOpinionMaker.SingletonHolder.instance;
+    public static OpinionService getInstance() {
+        return OpinionService.SingletonHolder.instance;
     }
 
     private static class SingletonHolder {
-        private static final NewOpinionMaker instance = new NewOpinionMaker();
+        private static final OpinionService instance = new OpinionService();
+    }
+
+    public Opinion makeOpinionTemplate(String code, TemporaryDAO dao) {
+        Opinion opinion = new Opinion();
+        opinion.setCode(code);
+        opinion.setPublicCode(Util.getInstance().generateCode());
+        opinion.setCreationDate(new Date());
+
+        dao.save(Opinion.class, opinion, opinion.getId());
+
+        return opinion;
     }
 
     public Opinion makeOpinionFromTemplate(Opinion original, TemporaryDAO dao) {

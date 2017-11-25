@@ -19,30 +19,29 @@
             <input type="text" value="{{shareLink}}" readonly style="width: 100%">
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-5">
-            <button style="width: 100%" type="button" class="btn btn-default" ng-click="addPersonInfoSection(opinion)">
-                Добавить секцию с информацией о респонденте
-            </button>
-        </div>
-    </div>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-5">
             <button style="width: 100%" type="button" class="btn btn-default" ng-click="addInfoSection(opinion)">
                 Добавить информационную секцию
             </button>
         </div>
-    </div>
+    </div>-->
 
 
     <div class="row section" ng-repeat="section in opinion.sections track by $index">
 
         <div class="col-md-12">
 
-            <label>Секция #{{$index + 1}}</label>
-            <input placeholder="optional description or clarification"
+            <label ng-show="section.type === 'QUESTIONS'">Секция #{{$index + 1}}</label>
+            <label ng-show="section.type === 'RESPONDENT_INFO'">Информация о респонденте</label>
+            <input placeholder="Опциональное описание или уточнения"
                    type="text" style="margin-top: 3px; width: 25%"
                    ng-model="section.text">
+            <button role="button" class="btn btn-default" title="Удалить секцию"
+                    style="margin-top: 3px;float: right;"
+                    ng-click="removeSection(section)">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
             <input placeholder="time to response in seconds"
                    type="text" style="margin-top: 3px;float: right;"
                    ng-model="section.timeToResponse">
@@ -55,6 +54,11 @@
                         <input placeholder="question text"
                                type="text" style="margin-top: 3px; width: 75%"
                                ng-model="question.questionText">
+                        <button role="button" class="btn btn-default" title="Удалить вопрос"
+                                style="margin-top: 3px;float: right;"
+                                ng-click="removeQuestion(question, section)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
                         <br/>
                         <span>
                             <input type="checkbox" ng-model="question.multipleAnswers">
@@ -78,8 +82,12 @@
                                         ng-options="section.id as (opinion.sections.indexOf(section)+1) for section in opinion.sections">
                                     <option value="">default</option>
                                 </select>
-                            </span>
-
+                                </span>
+                                <button role="button" class="btn btn-default" title="Удалить ответ"
+                                        style="margin-top: 3px;float: right;"
+                                        ng-click="removeAnswer(answer, question)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
                             </div>
                         </div>
                         <div class="row" align="middle">
@@ -101,8 +109,69 @@
             </div>
 
             <div ng-show="section.type === 'RESPONDENT_INFO'">
+
+                <div class="row question" ng-repeat="question in section.questions">
+                    <div class="col-md-12">
+
+                        <input placeholder="question text"
+                               type="text" style="margin-top: 3px; width: 75%"
+                               ng-model="question.questionText">
+                        <button role="button" class="btn btn-default" title="Удалить вопрос"
+                                style="margin-top: 3px;float: right;"
+                                ng-click="removeQuestion(question, section)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <br/>
+                        <span class="radio">
+                            <label>
+                                <input type="radio" name="optradio{{question.id}}"
+                                       ng-click="setAnswerTypeText(question, true)"
+                                       ng-checked="answerIsText(question) && fieldIsDefined(question.answerIsText)">
+                                <span>Поле для ввода текста</span>
+                            </label>
+                        </span>
+                        <span class="radio">
+                            <label>
+                                <input type="radio" name="optradio{{question.id}}"
+                                       ng-click="setAnswerTypeText(question, false)"
+                                       ng-checked="!answerIsText(question) && fieldIsDefined(question.answerIsText)">
+                                <span>Варианты ответов</span>
+                            </label>
+                        </span>
+                        <span>
+                            <input ng-disabled="multipleAnswersIsDisabled(question)"
+                                   type="checkbox"
+                                   ng-model="question.multipleAnswers">
+                            <span class="checkbox-text">Выбор нескольких ответов</span>
+                        </span>
+
+                        <div ng-hide="answerIsText(question)" class="row answer"
+                             ng-repeat="answer in question.answers">
+                            <div class="col-md-12">
+                                <input placeholder="answer text"
+                                       type="text" style="margin-top: 2px; width: 65%;"
+                                       ng-model="answer.answerText">
+                                <button role="button" class="btn btn-default" title="Удалить ответ"
+                                        style="margin-top: 3px;float: right;"
+                                        ng-click="removeAnswer(answer, question)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div ng-show="!answerIsText(question) && fieldIsDefined(question.answerIsText)"
+                             class="row" align="middle">
+                            <button type="button" class="btn btn-default" ng-click="newAnswer(question)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Добавить ответ
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
                 <div class="row" align="middle">
-                    <button type="button" class="btn btn-default" ng-click="addPersonInfoField(section)">
+                    <button type="button" class="btn btn-default" ng-click="newQuestion(section)">
                         <span class="glyphicon glyphicon-plus"></span>
                         Добавить вопрос
                     </button>
@@ -116,6 +185,12 @@
         <button type="button" class="btn btn-default" ng-click="newSection(opinion)">
             <span class="glyphicon glyphicon-plus"></span>
             Добавить секцию
+        </button>
+        <button type="button" class="btn btn-default"
+                ng-hide="personInfoSectionExists(opinion)"
+                ng-click="addPersonInfoSection(opinion)">
+            <span class="glyphicon glyphicon-plus"></span>
+            Добавить секцию с информацией о респонденте
         </button>
     </div>
 

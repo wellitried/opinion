@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "question")
-public class Question {
+public class Question implements Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,11 +29,14 @@ public class Question {
 
     private String questionText;
 
+    private Boolean answerIsText;
+
 
     public Question() {
     }
 
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -80,5 +83,13 @@ public class Question {
 
     public void setCustomNavigation(boolean customNavigation) {
         this.customNavigation = customNavigation;
+    }
+
+    public Boolean getAnswerIsText() {
+        return answerIsText;
+    }
+
+    public void setAnswerIsText(Boolean answerIsText) {
+        this.answerIsText = answerIsText;
     }
 }

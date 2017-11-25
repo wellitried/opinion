@@ -8,15 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "section")
-public class Section {
-
-    public String getAdditionalJson() {
-        return additionalJson;
-    }
-
-    public void setAdditionalJson(String additionalJson) {
-        this.additionalJson = additionalJson;
-    }
+public class Section implements Model {
 
     enum SectionType{
         QUESTIONS,
@@ -44,12 +36,11 @@ public class Section {
     @Enumerated(EnumType.STRING)
     private SectionType type;
 
-    private String additionalJson;
-
     public Section() {
     }
 
 
+    @Override
     public Long getId() {
         return id;
     }

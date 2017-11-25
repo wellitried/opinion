@@ -1,6 +1,6 @@
 <div class="container" style="min-height: 500px;">
 
-    <div class="row section" style="min-height: 500px;">
+    <div ng-hide="finished" class="row section" style="min-height: 500px;">
         <div class="col-md-12" style="margin-right: 50px;">
 
             <label>Section #{{currentSection.number}}</label><br/>
@@ -15,7 +15,7 @@
 
                     <div class="row answer" ng-repeat="answer in question.answers track by $index">
 
-                        <div class="col-md-8" ng-show="question.multipleAnswers">
+                        <div class="col-md-8" ng-show="question.multipleAnswers && !question.answerIsText">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" ng-model="answer.chosen">
@@ -24,13 +24,19 @@
                             </div>
                         </div>
 
-                        <div class="col-md-8" ng-show="!question.multipleAnswers">
+                        <div class="col-md-8" ng-show="!question.multipleAnswers && !question.answerIsText">
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="optradio{{question.id}}" ng-model="answer.chosen">
                                     <span>{{answer.answerText}}</span>
                                 </label>
                             </div>
+                        </div>
+
+                        <div class="col-md-8" ng-show="question.answerIsText">
+                            <label>
+                                <input type="text" ng-model="answer.answerText">
+                            </label>
                         </div>
 
                     </div>
@@ -53,6 +59,10 @@
             </button>
         </div>
 
+    </div>
+
+    <div ng-show="finished" class="row section" style="min-height: 500px;text-align: center">
+        <h4>Спасибо за прохождение опроса.</h4>
     </div>
 
 </div>

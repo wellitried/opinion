@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "opinion")
-public class Opinion {
+public class Opinion implements Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,6 +39,7 @@ public class Opinion {
     }
 
 
+    @Override
     public Long getId() {
         return id;
     }

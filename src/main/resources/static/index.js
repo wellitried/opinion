@@ -76,6 +76,13 @@ angular
                 opinion.code = code;
                 if (!opinion.sections) {
                     opinion.sections = [];
+                } else {
+                    var respondentInfoSection = opinion.sections.find(function (section) {
+                        return section.type === 'RESPONDENT_INFO';
+                    });
+                    var index = opinion.sections.indexOf(respondentInfoSection);
+                    opinion.sections.splice(index, 1);
+                    opinion.sections.unshift(respondentInfoSection);
                 }
                 $scope.opinion = opinion;
                 $scope.shareLink = $location.absUrl().split('#')[0] + '#/opinion/' + opinion.publicCode;
@@ -98,6 +105,37 @@ angular
                 });
             }
 
+            $scope.removeSection = function (section) {
+                if (section.id) {
+                    remove('section', section.id)
+                }
+                var sectionIndex = $scope.opinion.sections.indexOf(section);
+                $scope.opinion.sections.splice(sectionIndex, 1);
+            };
+
+            $scope.removeAnswer = function (answer, question) {
+                if (answer.id) {
+                    remove('answer', answer.id)
+                }
+                var answerIndex = question.answers.indexOf(answer);
+                question.answers.splice(answerIndex, 1);
+            };
+
+            $scope.removeQuestion = function (question, section) {
+                if (question.id) {
+                    remove('question', question.id)
+                }
+                var questionIndex = section.questions.indexOf(question);
+                section.questions.splice(questionIndex, 1);
+            };
+
+            function remove(type, id) {
+                $http({
+                    method: 'POST',
+                    url: '/remove/' + type + '/' + id
+                })
+            }
+
             $scope.newSection = function (opinion) {
                 var section = {
                     opinionPoll: {id: opinion.id},
@@ -108,20 +146,41 @@ angular
             };
 
             $scope.addPersonInfoSection = function (opinion) {
-                if (opinion.sections.some(function (section) { return section.type === 'RESPONDENT_INFO'; })) {
-                    alert("В опросе может быть единственная секция с информацией о респонденте");
-                    return;
-                }
                 var section = {
                     opinionPoll: {id: opinion.id},
                     type: "RESPONDENT_INFO",
-                    additionalJson: {}
+                    questions: []
                 };
                 opinion.sections.unshift(section);
             };
 
-            $scope.addPersonInfoField = function (section) {
+            $scope.personInfoSectionExists = function (opinion) {
+                if (!opinion) {
+                    return;
+                }
+                return opinion.sections.some(function (section) {
+                    return section.type === 'RESPONDENT_INFO';
+                });
+            };
 
+            $scope.setAnswerTypeText = function (question, isText) {
+                question.answers = [];
+                if (isText) {
+                    $scope.newAnswer(question);
+                }
+                question.answerIsText = isText;
+            };
+
+            $scope.answerIsText = function (question) {
+                return question.answerIsText === true;
+            };
+
+            $scope.fieldIsDefined = function (field) {
+                return typeof field !== 'undefined'
+            };
+
+            $scope.multipleAnswersIsDisabled = function (question) {
+                return question.answerIsText === true || typeof question.answerIsText === 'undefined';
             };
 
             $scope.newQuestion = function (section) {
@@ -142,9 +201,6 @@ angular
 
             $scope.saveOpinion = function (opinion) {
 
-                opinion.sections.forEach(function (section) {
-                    section.additionalJson = JSON.stringify(section.additionalJson);
-                });
                 console.log(opinion);
 
                 $scope.loading = true;
@@ -198,12 +254,13 @@ angular
 
             function init(data) {
                 console.log(data);
-                $scope.opinion = data;
-                if (!$scope.opinion.sections || $scope.opinion.sections.length == 0) {
+                if (!data.sections || data.sections.length == 0) {
                     alert("Empty opinion poll!");
                     return;
                 }
+                $scope.opinion = data;
                 $scope.currentSection = $scope.opinion.sections[0];
+                $scope.finished = false;
 
                 $scope.showPreviousSectionButton = function () {
                     return $scope.opinion.sections.indexOf($scope.currentSection) !== 0;
@@ -220,6 +277,15 @@ angular
                     var index = $scope.opinion.sections.indexOf($scope.currentSection);
                     if ($scope.opinion.sections[index + 1]) {
                         $scope.currentSection = $scope.opinion.sections[index + 1];
+                    } else {
+                        $scope.finished = true;
+                        if (!test) {
+                            $http({
+                                method: 'POST',
+                                url: '/saveopinionpoll',
+                                data: angular.toJson($scope.opinion)
+                            })
+                        }
                     }
                 };
 

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "answer")
-public class Answer {
+public class Answer implements Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,15 +19,15 @@ public class Answer {
 
     private String answerText;
 
-    private boolean chosen;
+    private Boolean chosen;
 
     private Long navigateToSectionId;
-
 
     public Answer() {
     }
 
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -52,11 +52,11 @@ public class Answer {
         this.question = question;
     }
 
-    public boolean isChosen() {
+    public Boolean getChosen() {
         return chosen;
     }
 
-    public void setChosen(boolean chosen) {
+    public void setChosen(Boolean chosen) {
         this.chosen = chosen;
     }
 
@@ -67,4 +67,5 @@ public class Answer {
     public void setNavigateToSectionId(Long navigateToSectionId) {
         this.navigateToSectionId = navigateToSectionId;
     }
+
 }

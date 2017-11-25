@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Date;
-
 @Controller
 public class ApplicationController {
 
@@ -58,7 +56,7 @@ public class ApplicationController {
 
         Opinion opinion = Util.getInstance().fromJson(body.toString(), Opinion.class);
         if (opinion != null && opinion.getId() != null) {
-            temporaryDAO.save(Opinion.class, opinion, opinion.getId());
+            opinion = (Opinion) temporaryDAO.save(Opinion.class, opinion, opinion.getId());
             return ResponseEntity.ok().body(Util.getInstance().toJson(opinion));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -79,5 +77,25 @@ public class ApplicationController {
         }
 
         return ResponseEntity.ok().body(Util.getInstance().toJson(opinion));
+    }
+
+    @RequestMapping(path = {"/remove/{type}/{id}"}, method = RequestMethod.POST)
+    public ResponseEntity removeEntity(@PathVariable String type, @PathVariable Long id) {
+
+        switch (type) {
+            case "section":
+                temporaryDAO.removeSection(id);
+                break;
+            case "question":
+                temporaryDAO.removeQuestion(id);
+                break;
+            case "answer":
+                temporaryDAO.removeAnswer(id);
+                break;
+            default:
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

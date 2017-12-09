@@ -15,8 +15,11 @@
     </div>
     <div class="row">
         <div class="col-md-6" title="Предоставляется участникам опроса">
-            <label>Публичная ссылка: </label>
             <input type="text" value="{{shareLink}}" readonly style="width: 100%">
+        </div>
+        <div class="col-md-6">
+            <a class="btn btn-default" title="Результаты прохождения опроса"
+               ng-href="{{statisticsLink}}" target="_blank">Статистика прохождения</a>
         </div>
     </div>
     <!--<div class="row">
@@ -42,7 +45,7 @@
                     ng-click="removeSection(section)">
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
-            <input placeholder="time to response in seconds"
+            <input placeholder="Время на секцию в секундах"
                    type="text" style="margin-top: 3px;float: right;"
                    ng-model="section.timeToResponse">
 
@@ -51,7 +54,7 @@
                     <div class="col-md-12">
 
                         <label>Вопрос #{{$index + 1}}</label>
-                        <input placeholder="question text"
+                        <input placeholder="Текст вопроса"
                                type="text" style="margin-top: 3px; width: 75%"
                                ng-model="question.questionText">
                         <button role="button" class="btn btn-default" title="Удалить вопрос"
@@ -73,7 +76,7 @@
                             <div class="col-md-12">
 
                                 <label>Ответ #{{$index + 1}}</label>
-                                <input placeholder="answer text"
+                                <input placeholder="Текст ответа"
                                        type="text" style="margin-top: 2px; width: 65%;"
                                        ng-model="answer.answerText">
                                 <span ng-show="question.customNavigation">
@@ -113,7 +116,7 @@
                 <div class="row question" ng-repeat="question in section.questions">
                     <div class="col-md-12">
 
-                        <input placeholder="question text"
+                        <input placeholder="Текст вопроса"
                                type="text" style="margin-top: 3px; width: 75%"
                                ng-model="question.questionText">
                         <button role="button" class="btn btn-default" title="Удалить вопрос"
@@ -148,7 +151,7 @@
                         <div ng-hide="answerIsText(question)" class="row answer"
                              ng-repeat="answer in question.answers">
                             <div class="col-md-12">
-                                <input placeholder="answer text"
+                                <input placeholder="Текст ответа"
                                        type="text" style="margin-top: 2px; width: 65%;"
                                        ng-model="answer.answerText">
                                 <button role="button" class="btn btn-default" title="Удалить ответ"
